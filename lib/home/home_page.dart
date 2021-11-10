@@ -1,7 +1,10 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:push_notifs_o2021/books.dart';
+import 'package:push_notifs_o2021/main.dart';
 import 'package:push_notifs_o2021/utils/notification_util.dart';
 
 import 'notif_menu.dart';
@@ -33,11 +36,37 @@ class _HomePageState extends State<HomePage> {
     });
 
     super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message){
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if(notification!=null && android !=null){
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title, 
+          notification.body, 
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              color: Colors.blue,
+              playSound: true,
+            )
+          ));
+      }
+    });
+
+    getToken();
   }
   
   void processDefaultActionRecieved(ReceivedAction action){
     print("Accion recibida >>>>>>>>>>>>>> $action");
     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Books(datos: action.title,)));
+  }
+
+  void getToken()async{
+    String? token = await FirebaseMessaging.instance.getToken();
+    print(token);
   }
 
   @override
