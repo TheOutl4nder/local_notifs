@@ -11,6 +11,31 @@ void main() async {
 
 Future initLocalNotifications() async {
   // TODO: inicializar los canales
+  await AwesomeNotifications().initialize(null,[
+    NotificationChannel(
+      channelKey: channelSimpleId, 
+      channelName: channelSimpleName, 
+      channelDescription: channelSimpleDescr,
+      defaultColor: Colors.purple,
+      ledColor: Colors.blue,
+      importance: NotificationImportance.Default),
+
+      NotificationChannel(
+      channelKey: channelBigPictureId, 
+      channelName: channelBigPictureName, 
+      channelDescription: channelBigPictureDescr,
+      defaultColor: Colors.purple,
+      ledColor: Colors.yellow,
+      importance: NotificationImportance.High),
+
+      NotificationChannel(
+      channelKey: channelScheduleId, 
+      channelName: channelScheduleName, 
+      channelDescription: channelScheduleDescr,
+      defaultColor: Colors.purple,
+      ledColor: Colors.red,
+      importance: NotificationImportance.Default)
+  ]);
 }
 
 class MyApp extends StatelessWidget {
